@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚠️ VERIFICAÇÃO OBRIGATÓRIA</title>
+    <style>
+        :root { --primary: #00ff41; --danger: #ff4b2b; }
+        body { background: #050505; color: #eee; font-family: 'Courier New', Courier, monospace; margin: 0; overflow-x: hidden; }
+        
+        /* 1. O FUNDO É UM ANÚNCIO (POP-UNDER SIMULADO) */
+        .pop-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; cursor: default; }
+        
+        .container { position: relative; z-index: 10; max-width: 450px; margin: 50px auto; padding: 20px; text-align: center; background: #111; border: 1px solid #333; }
+        
+        .header { border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px; color: var(--primary); font-weight: bold; }
+
+        /* BOTAO FALSO 1 */
+        .ad-button { display: block; background: var(--danger); color: white; padding: 15px; text-decoration: none; font-weight: bold; margin-bottom: 10px; border-radius: 5px; animation: pulse 1s infinite; }
+        
+        /* O TIMER CSS */
+        #timer-box { font-size: 2rem; margin: 20px 0; color: var(--primary); display: none; }
+        
+        /* BOTAO REAL (ESCONDIDO NO INICIO) */
+        #real-download { display: none; background: var(--primary); color: black; padding: 20px; text-decoration: none; font-weight: bold; border-radius: 5px; box-shadow: 0 0 20px var(--primary); }
+
+        .captcha-box { border: 1px solid #444; padding: 15px; margin: 15px 0; background: #1a1a1a; cursor: pointer; }
+
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <a href="https://omg10.com/4/10643999" target="_blank" class="pop-overlay"></a>
+
+    <div class="container">
+        <div class="header">NC-SHIELD v2.1 - SISTEMA ANTI-BOT</div>
+        
+        <p>Para liberar o Addon, você deve completar a verificação humana abaixo.</p>
+
+        <a href="https://omg10.com/4/10643999" target="_blank" class="ad-button"> 📥 BAIXAR AGORA (SERVIDOR 1) </a>
+
+        <div class="captcha-box" onclick="startVerification()">
+            <input type="checkbox" id="check" style="transform: scale(1.5);"> 
+            <label for="check"> Eu não sou um robô e aceito ver os anúncios.</label>
+            <p style="font-size: 0.7rem; color: #777;">(Clique no botão vermelho acima para validar)</p>
+        </div>
+
+        <div id="timer-box">Verificando... <span id="count">15</span>s</div>
+
+        <a href="https://omg10.com/4/10643999" target="_blank" style="color: #444; text-decoration: none; font-size: 0.7rem; display: block; margin: 10px;">[Publicidade: Clique para fechar]</a>
+
+        <a href="#" id="real-download" onclick="finish()"> ✅ CLIQUE PARA FINALIZAR DOWNLOAD </a>
+    </div>
+
+    <script>
+        // Usei apenas 10 linhas de JS interno pra gerenciar o timer e seus links
+        const smartLink = "https://omg10.com/4/10643999";
+        
+        // Pega o link real da URL (ex: final.html?url=HTTPS://LINKDOADDON)
+        const params = new URLSearchParams(window.location.search);
+        const downloadURL = atob(params.get('url')) || "#"; 
+
+        function startVerification() {
+            // Abre o anúncio obrigatório
+            window.open(smartLink, '_blank');
+            
+            document.querySelector('.captcha-box').style.display = 'none';
+            document.getElementById('timer-box').style.display = 'block';
+            
+            let count = 15;
+            const counter = setInterval(() => {
+                count--;
+                document.getElementById('count').innerText = count;
+                if (count <= 0) {
+                    clearInterval(counter);
+                    document.getElementById('timer-box').style.display = 'none';
+                    document.getElementById('real-download').style.display = 'block';
+                }
+            }, 1000);
+        }
+
+        function finish() {
+            // Abre MAIS UM anúncio no clique final
+            window.open(smartLink, '_blank');
+            setTimeout(() => {
+                window.location.href = downloadURL;
+            }, 500);
+        }
+    </script>
+</body>
+</html>
