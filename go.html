@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aguarde... Verificando Link</title>
+    <style>
+        body { background: #0f0f0f; color: white; font-family: 'Segoe UI', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; }
+        .card { background: #1a1a1a; padding: 30px; border-radius: 20px; border: 2px solid #00ff41; box-shadow: 0 0 20px rgba(0, 255, 65, 0.2); max-width: 400px; width: 90%; }
+        h1 { font-size: 1.2rem; color: #00ff41; margin-bottom: 20px; }
+        #timer { font-size: 3rem; font-weight: bold; margin: 20px 0; color: #fff; }
+        .status { color: #888; font-size: 0.9rem; margin-bottom: 20px; }
+        .btn { background: #333; color: #666; padding: 15px 30px; border-radius: 10px; border: none; font-weight: bold; font-size: 1rem; cursor: not-allowed; transition: 0.3s; width: 100%; }
+        .btn.active { background: #00ff41; color: #000; cursor: pointer; box-shadow: 0 5px 15px rgba(0, 255, 65, 0.4); }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1 id="addon-name">Preparando Download...</h1>
+        <div class="status" id="status-text">Aguarde a verificação de segurança</div>
+        <div id="timer">15</div>
+        <button id="btn-main" class="btn" onclick="prosseguir()">AGUARDE...</button>
+        <p style="font-size: 0.7rem; color: #444; margin-top: 15px;">Anúncios ajudam a manter os Addons gratuitos.</p>
+    </div>
+
+    <script src="links.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        const addon = LINKS_DATABASE[id];
+
+        if (!addon) {
+            document.body.innerHTML = "<h1>Link inválido ou expirado.</h1>";
+        } else {
+            document.getElementById('addon-name').innerText = addon.name;
+            let timeLeft = 15;
+            const timerEl = document.getElementById('timer');
+            const btnEl = document.getElementById('btn-main');
+            const statusEl = document.getElementById('status-text');
+
+            const countdown = setInterval(() => {
+                if (document.hasFocus()) {
+                    timeLeft--;
+                    timerEl.innerText = timeLeft;
+                    statusEl.innerText = "Verificando integridade do link...";
+                    statusEl.style.color = "#888";
+                } else {
+                    statusEl.innerText = "PAUSADO: NÃO SAIA DA PÁGINA!";
+                    statusEl.style.color = "#ff4b2b";
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    timerEl.style.display = 'none';
+                    btnEl.innerText = "CLIQUE PARA PROSSEGUIR";
+                    btnEl.classList.add('active');
+                }
+            }, 1000);
+        }
+
+        function prosseguir() {
+            if (timeLeft <= 0) {
+                // AGRESSIVIDADE: Abre o SmartLink em nova aba
+                window.open("https://omg10.com/4/10643999", "_blank"); 
+                // Manda para o download real (ou para a verify.html se quiser mais uma camada)
+                setTimeout(() => {
+                    window.location.href = addon.url;
+                }, 500);
+            }
+        }
+    </script>
+</body>
+</html>
